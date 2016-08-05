@@ -564,12 +564,12 @@ void ThreadedWriter::DispatchIO(const IO& io) {
   while (written < io.buf_->Used()) {
     Slice data(io.buf_->Data() + written, io_size_);
     Status s = io.file_->Append(data);
-    assert(s.ok());
     if (!s.ok()) {
       // That is definite IO error to device. There is not much we can
       // do but ignore the failure. This can lead to corruption of data on
       // disk, but the cache will skip while reading
       fprintf(stderr, "Error writing data to file. %s\n", s.ToString().c_str());
+      assert(s.ok());
     }
     written += io_size_;
   }
